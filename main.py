@@ -9,8 +9,8 @@ import os
 from typing import Optional
 
 # Initialize Supabase
-SUPABASE_URL = os.getenv("SUPABASE_URL", "https://tukehmqhitsbucchfdad.supabase.co")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR1a2VobXFoaXRzYnVjY2hmZGFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI2NjU3MjcsImV4cCI6MjA2ODI0MTcyN30.dfpK1d1M8Z199yI4IXCJ2epzRzKCOh1CoGXPdAvoWeU")
+SUPABASE_URL = os.getenv("SUPABASE_URL", "url')
+SUPABASE_KEY = os.getenv("SUPABASE_KEY", "token")
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 app = FastAPI()
