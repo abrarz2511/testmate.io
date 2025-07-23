@@ -20,7 +20,7 @@ def create_user_routes(supabase: Client):
             response = supabase.auth.sign_up({
                 "email": user.email,
                 "password": user.password,
-                "username": user.username
+                "username": user.username if user.username else None
             })
             return {
                 "message": "User registered successfully",

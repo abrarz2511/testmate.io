@@ -2,10 +2,12 @@ import os
 import json
 from typing import Dict, List, Any, Optional, Union
 from openai import OpenAI
-from analyze_code import CodeAnalyzer, detect_language_with_gpt
+from .analyze_code import CodeAnalyzer
+from dotenv import load_dotenv
 
+load_dotenv()
 
-class TestGenerator:
+class TestGenerator: 
     """Generates test cases based on code analysis using OpenAI API."""
     
     def __init__(self, api_key: Optional[str] = None):
@@ -25,7 +27,7 @@ class TestGenerator:
     
     def generate_tests(self, code: str) -> Dict[str, Any]:
         """
-        Generate test cases based on code analysis.
+        Generate test cases based on code analysis. (Wrapper function)
         
         Args:
             code: The source code to analyze and generate tests for
@@ -40,7 +42,7 @@ class TestGenerator:
             return {"error": f"Analysis failed: {analysis['error']}"}
         
         # Detect the language of the original code
-        language = detect_language_with_gpt(code)
+        language = self.analyzer._detect_language_with_gpt(code)
         
         # Generate tests based on the analysis
         return self._generate_test_cases(analysis, language, code)
@@ -65,12 +67,14 @@ class TestGenerator:
         3. Edge cases and error conditions
         4. Tests for different input scenarios
         
-        Please provide your response in JSON format with the following structure:
+        CRITICAL: You must respond with ONLY valid JSON. Do not include any explanatory text before or after the JSON.
+        
+        Use this exact JSON structure:
         {{
             "test_suite": [
                 {{
-                    "test_type": "unit_test|integration_test",
-                    "target": "function_name|class_name|method_name",
+                    "test_type": "unit_test",
+                    "target": "function_name",
                     "description": "what this test is testing",
                     "test_cases": [
                         {{
@@ -94,22 +98,32 @@ class TestGenerator:
             response = self.client.chat.completions.create(
                 model="gpt-4",
                 messages=[
-                    {"role": "system", "content": f"You are a testing expert specializing in {language}. Generate comprehensive, well-structured test cases that follow best practices for {language} testing."},
+                    {"role": "system", "content": f"You are a testing expert specializing in {language}. Generate comprehensive, well-structured test cases that follow best practices for {language} testing. IMPORTANT: You must respond with valid JSON only."},
                     {"role": "user", "content": prompt}
                 ],
                 temperature=0.2,
-                max_tokens=3000
+                max_tokens=4000
             )
             
             # Parse the JSON response
-            test_text = response.choices[0].message.content
-            return json.loads(test_text)
+            test_text = response.choices[0].message.content.strip()
+            
+            # Debug: Print the raw response to see what we're getting
+            print(f"Raw API response: {test_text[:200]}...")
+            
+            if not test_text:
+                return {"error": "Empty response from API"}
+            
+            try:
+                return json.loads(test_text)
+            except json.JSONDecodeError as json_error:
+                return {"error": f"Invalid JSON response from API: {str(json_error)}. Raw response: {test_text[:500]}..."}
         
         except Exception as e:
             return {"error": f"Test generation error: {str(e)}"}
     
 
-    def generate_tests_for_file(self, file_path: str) -> Dict[str, Any]:
+    def generate_tests_for_file(self, file_path: str) -> Dict[str, Any]:  # Probably not  needed
         """
         Generate test cases for a code file.
         
@@ -148,28 +162,34 @@ class TestGenerator:
             print(f"Error saving tests: {str(e)}")
             return False
 
-
+'''
 def main():
     """Example usage of the TestGenerator."""
     # Example code to test
     sample_code = """
-def add_numbers(a: int, b: int) -> int:
-    return a + b
+function addNumbers(a, b) {
+    return a + b;
+}
 
-def multiply_numbers(a: int, b: int) -> int:
-    return a * b
+function multiplyNumbers(a, b) {
+    return a * b;
+}
 
-class Calculator:
-    def __init__(self):
-        self.history = []
+class Calculator {
+    constructor() {
+        this.history = [];
+    }
     
-    def add(self, a: int, b: int) -> int:
-        result = a + b
-        self.history.append(f"{a} + {b} = {result}")
-        return result
+    add(a, b) {
+        const result = a + b;
+        this.history.push(`${a} + ${b} = ${result}`);
+        return result;
+    }
     
-    def get_history(self) -> list:
-        return self.history
+    getHistory() {
+        return this.history;
+    }
+}
 """
     
     # Initialize the test generator
@@ -193,3 +213,5 @@ class Calculator:
 
 if __name__ == "__main__":
     main() 
+
+'''

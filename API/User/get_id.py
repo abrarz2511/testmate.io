@@ -1,6 +1,7 @@
 from fastapi import HTTPException, Header
-from supabase import Client
 from typing import Optional
+from supabase import Client
+
 
 async def get_current_user_id(
     authorization: Optional[str] = Header(None),

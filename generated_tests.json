@@ -1,0 +1,111 @@
+{
+  "test_suite": [
+    {
+      "test_type": "unit_test",
+      "target": "addNumbers",
+      "description": "Testing the addNumbers function",
+      "test_cases": [
+        {
+          "name": "add_positive_numbers",
+          "description": "Test case for adding two positive numbers",
+          "input": "2, 3",
+          "expected_output": "5",
+          "test_code": "expect(addNumbers(2, 3)).toBe(5);"
+        },
+        {
+          "name": "add_negative_numbers",
+          "description": "Test case for adding two negative numbers",
+          "input": "-2, -3",
+          "expected_output": "-5",
+          "test_code": "expect(addNumbers(-2, -3)).toBe(-5);"
+        },
+        {
+          "name": "add_zero",
+          "description": "Test case for adding zero to a number",
+          "input": "5, 0",
+          "expected_output": "5",
+          "test_code": "expect(addNumbers(5, 0)).toBe(5);"
+        }
+      ]
+    },
+    {
+      "test_type": "unit_test",
+      "target": "multiplyNumbers",
+      "description": "Testing the multiplyNumbers function",
+      "test_cases": [
+        {
+          "name": "multiply_positive_numbers",
+          "description": "Test case for multiplying two positive numbers",
+          "input": "2, 3",
+          "expected_output": "6",
+          "test_code": "expect(multiplyNumbers(2, 3)).toBe(6);"
+        },
+        {
+          "name": "multiply_negative_numbers",
+          "description": "Test case for multiplying two negative numbers",
+          "input": "-2, -3",
+          "expected_output": "6",
+          "test_code": "expect(multiplyNumbers(-2, -3)).toBe(6);"
+        },
+        {
+          "name": "multiply_zero",
+          "description": "Test case for multiplying a number by zero",
+          "input": "5, 0",
+          "expected_output": "0",
+          "test_code": "expect(multiplyNumbers(5, 0)).toBe(0);"
+        }
+      ]
+    },
+    {
+      "test_type": "unit_test",
+      "target": "Calculator.add",
+      "description": "Testing the add method of the Calculator class",
+      "test_cases": [
+        {
+          "name": "add_positive_numbers",
+          "description": "Test case for adding two positive numbers using the Calculator class",
+          "input": "2, 3",
+          "expected_output": "5",
+          "test_code": "let calculator = new Calculator(); expect(calculator.add(2, 3)).toBe(5);"
+        },
+        {
+          "name": "add_negative_numbers",
+          "description": "Test case for adding two negative numbers using the Calculator class",
+          "input": "-2, -3",
+          "expected_output": "-5",
+          "test_code": "let calculator = new Calculator(); expect(calculator.add(-2, -3)).toBe(-5);"
+        },
+        {
+          "name": "add_zero",
+          "description": "Test case for adding zero to a number using the Calculator class",
+          "input": "5, 0",
+          "expected_output": "5",
+          "test_code": "let calculator = new Calculator(); expect(calculator.add(5, 0)).toBe(5);"
+        }
+      ]
+    },
+    {
+      "test_type": "unit_test",
+      "target": "Calculator.getHistory",
+      "description": "Testing the getHistory method of the Calculator class",
+      "test_cases": [
+        {
+          "name": "get_empty_history",
+          "description": "Test case for getting the history when no calculations have been made",
+          "input": "",
+          "expected_output": "[]",
+          "test_code": "let calculator = new Calculator(); expect(calculator.getHistory()).toEqual([]);"
+        },
+        {
+          "name": "get_non_empty_history",
+          "description": "Test case for getting the history after some calculations have been made",
+          "input": "2, 3",
+          "expected_output": "['2 + 3 = 5']",
+          "test_code": "let calculator = new Calculator(); calculator.add(2, 3); expect(calculator.getHistory()).toEqual(['2 + 3 = 5']);"
+        }
+      ]
+    }
+  ],
+  "test_framework": "Jest",
+  "setup_instructions": "1. Install Node.js and npm. 2. Install Jest using npm (npm install --save-dev jest). 3. Create a file with your tests and name it with the .test.js extension. 4. In your package.json file, change the value of 'test' in the 'scripts' section to 'jest'. 5. Run your tests using the 'npm test' command."
+}

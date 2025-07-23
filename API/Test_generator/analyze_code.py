@@ -56,7 +56,7 @@ class CodeAnalyzer:
             
             language = response.choices[0].message.content.strip().lower()
             
-            # Clean up the response to ensure it's a valid language name
+            # Validity check: Clean up the response to ensure it's a valid language name
             valid_languages = {
                 'python', 'javascript', 'typescript', 'java', 'cpp', 'c', 'csharp', 
                 'go', 'rust', 'php', 'ruby', 'swift', 'kotlin', 'jsx', 'tsx'
@@ -147,8 +147,16 @@ class CodeAnalyzer:
             )
             
             # Parse the JSON response
-            analysis_text = response.choices[0].message.content
-            return json.loads(analysis_text)
+            analysis_text = response.choices[0].message.content.strip()
+            
+            try:
+                parsed_analysis = json.loads(analysis_text)
+                print("Successfully parsed JSON analysis")
+                return parsed_analysis
+            except json.JSONDecodeError as json_error:
+                print(f"JSON parsing error: {str(json_error)}")
+                print(f"Full response: {analysis_text}")
+                return {"error": f"Invalid JSON response from API: {str(json_error)}"}
         
         except Exception as e:
             return {"error": f"OpenAI API error: {str(e)}"}
@@ -186,9 +194,10 @@ class CodeAnalyzer:
             
             analysis["statistics"] = statistics
         
-        return analysis
+        return analysis 
 
-    def analyze_file(self, file_path: str) -> Dict[str, Any]:
+'''
+    def analyze_file(self, file_path: str) -> Dict[str, Any]:  # Probably not needed
         """
         Analyze a code file.
         
@@ -207,7 +216,7 @@ class CodeAnalyzer:
         except Exception as e:
             return {"error": f"File reading error: {str(e)}"}
 
-    def generate_report(self, analysis: Dict[str, Any], format_type: str = "text") -> str:
+    def generate_report(self, analysis: Dict[str, Any], format_type: str = "text") -> str:  # Probably not needed
         """
         Generate a report from the analysis results.
         
@@ -230,7 +239,7 @@ class CodeAnalyzer:
         else:  # text format
             return self._generate_text_report(analysis)
     
-    def _generate_text_report(self, analysis: Dict[str, Any]) -> str:
+    def _generate_text_report(self, analysis: Dict[str, Any]) -> str:   # Probably not needed
         """Generate a text report from analysis results."""
         report = []
         report.append("CODE ANALYSIS REPORT")
@@ -291,7 +300,7 @@ class CodeAnalyzer:
         
         return "\n".join(report)
     
-    def _generate_html_report(self, analysis: Dict[str, Any]) -> str:
+    def _generate_html_report(self, analysis: Dict[str, Any]) -> str:  # Probably not needed
         """Generate an HTML report from analysis results."""
         html = """
         <!DOCTYPE html>
@@ -388,3 +397,4 @@ class CodeAnalyzer:
         except Exception as e:
             print(f"Error saving file: {e}")
     
+'''
